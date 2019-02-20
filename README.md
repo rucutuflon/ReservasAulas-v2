@@ -1,6 +1,6 @@
 # Tarea Reservas de Aulas
 ## Profesor: José Ramón Jiménez Reyes
-## Alumno: V�ctor Manuel Serrano Tijeras
+## Alumno: Víctor Manuel Serrano Tijeras
 
 El cliente nos comenta que debemos tener en cuenta los siguientes aspectos:
 
