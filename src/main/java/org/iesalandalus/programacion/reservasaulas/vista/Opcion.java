@@ -1,5 +1,10 @@
 package org.iesalandalus.programacion.reservasaulas.vista;
 
+import org.iesalandalus.programacion.reservasaulas.controlador.ControladorReservasAulas;
+import org.iesalandalus.programacion.reservasaulas.controlador.IControladorReservasAulas;
+import org.iesalandalus.programacion.reservasaulas.modelo.IModeloReservasAulas;
+import org.iesalandalus.programacion.reservasaulas.modelo.ModeloReservasAulas;
+
 public enum Opcion {
 
 	SALIR ("0. Salir") {
@@ -132,7 +137,7 @@ public enum Opcion {
 	};
 	
 	private String mensajeAMostrar;
-	private static IUTextual vista = new IUTextual();
+	private static IVistaReservasAulas vista = new VistaReservasAulas();
 	
 	private Opcion (String mensajeAMostrar) {
 		this.mensajeAMostrar = mensajeAMostrar;
@@ -143,7 +148,7 @@ public enum Opcion {
 	
 	public abstract void ejecutar();
 	
-	protected static void setVista (IUTextual iu) {
+	protected static void setVista (VistaReservasAulas iu) {
 		vista = iu;
 	}
 	

@@ -20,7 +20,7 @@ public class Profesor {
 	}
 	
 	public Profesor(Profesor p) {
-		if (p == null) {
+		if(p == null) {
 			throw new IllegalArgumentException("No se puede copiar un profesor nulo.");
 		}
 		this.nombre = p.nombre;
@@ -33,26 +33,26 @@ public class Profesor {
 	}
 
 	private void setNombre(String nombre) {
-		if (nombre == null) {
+		if(nombre == null) {
 			throw new IllegalArgumentException("El nombre del profesor no puede ser nulo.");
 		}
 		if(nombre.isEmpty()) {
-			throw new IllegalArgumentException("El nombre del profesor no puede estar vac√≠o.");
+			throw new IllegalArgumentException("El nombre del profesor no puede estar vacÌo.");
 		}
 		this.nombre = nombre;
 	}
 
 	public String getCorreo() {
-		if (correo == null) {
-			throw new IllegalArgumentException("El correo del profesor no puede ser nulo.");
-		}
-		if (correo.isEmpty()) {
-			throw new IllegalArgumentException("El correo del profesor no es v√°lido.");
-		}
 		return correo;
 	}
 
 	public void setCorreo(String correo) {
+		if(correo == null) {
+			throw new IllegalArgumentException("El correo del profesor no puede ser nulo.");
+		}
+		if(correo.isEmpty()) {
+			throw new IllegalArgumentException("El correo del profesor no es v·lido.");
+		}
 		this.correo = correo;
 	}
 
@@ -61,8 +61,8 @@ public class Profesor {
 	}
 
 	public void setTelefono(String telefono) {
-		if (telefono != null && telefono.isEmpty()) {
-			throw new IllegalArgumentException("El tel√©fono del profesor no es v√°lido.");
+		if(telefono != null && telefono.isEmpty()) {
+			throw new IllegalArgumentException("El telÈfono del profesor no es v·lido.");
 		}
 		this.telefono = telefono;
 	}
@@ -97,5 +97,4 @@ public class Profesor {
 		return "[nombre=" + nombre + ", correo=" + correo + (telefono == null ? "":", telefono=" + telefono) + "]";
 	}
 	
-
 }

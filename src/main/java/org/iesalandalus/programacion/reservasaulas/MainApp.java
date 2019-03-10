@@ -1,20 +1,21 @@
 package org.iesalandalus.programacion.reservasaulas;
 
-/*
-import org.iesalandalus.programacion.reservasaulas.controlador.ControladorReservasAulas;
-import org.iesalandalus.programacion.reservasaulas.controlador.IControladorReservasAulas;
-import org.iesalandalus.programacion.reservasaulas.modelo.IModeloReservasAulas;
-import org.iesalandalus.programacion.reservasaulas.modelo.ModeloReservasAulas;
-import org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas;
-import org.iesalandalus.programacion.reservasaulas.vista.VistaReservasAulas;
-*/
+import org.iesalandalus.programacion.reservasaulas.vista.Consola;
+import org.iesalandalus.programacion.reservasaulas.vista.Opcion;
+
 public class MainApp {
 
 	public static void main(String[] args) {
-		/*IVistaReservasAulas vista = new VistaReservasAulas();
-		IModeloReservasAulas modelo = new ModeloReservasAulas();
-		IControladorReservasAulas controlador = new ControladorReservasAulas(modelo, vista);
-		controlador.comenzar();*/
+		System.out.println("Programa para la gestión de reservas de espacios del IES Al-Andalus");
+		int opcion = 0;
+		
+		do {
+			Consola.mostrarCabecera("==========IES Al-Andalus==========");
+			Consola.mostrarMenu();
+			opcion = Consola.elegirOpcion();
+			Opcion.getOpcionSegunOrdinal(opcion).ejecutar();
+		} while (opcion != 0);
+	
 	}
 
 }
