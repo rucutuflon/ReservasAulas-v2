@@ -1,28 +1,30 @@
 package org.iesalandalus.programacion.reservasaulas.modelo.dao;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.naming.OperationNotSupportedException;
 
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Profesor;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Reserva;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.Permanencia;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.PermanenciaPorTramo;
 
 public class Reservas {
 
-	private static final int MAX_RESERVAS = 10;
-	private int numReservas;
-	private Reserva[] coleccionReservas;
+	private static final int MAX_PUNTOS_PROFESOR_MES = 200;
+	private List<Reserva> coleccionReservas;
 	
 	public Reservas() {
-		this.numReservas = 0;
-		this.coleccionReservas = new Reserva[MAX_RESERVAS];
+		this.coleccionReservas = new ArrayList<Reserva>();
 	}
 	
 	public Reservas(Reservas r) {
 		if(r == null) {
 			throw new IllegalArgumentException("No se pueden copiar reservas nulas.");
 		}
-		this.numReservas = r.numReservas;
 		setReservas(r);
 	}
 	
@@ -30,66 +32,93 @@ public class Reservas {
 		this.coleccionReservas = copiaProfundaReservas(reservas.coleccionReservas);
 	}
 	
-	private Reserva[] copiaProfundaReservas(Reserva[] c) {
-		Reserva[] aux = new Reserva[MAX_RESERVAS];
-		for (int i = 0; i < aux.length; i++) {
-			if(c[i] == null) {
-				aux[i] = null;
+	private List<Reserva> copiaProfundaReservas(List<Reserva> lista) {
+		List<Reserva> aux = new ArrayList<Reserva>();
+		for (Reserva r : lista) {
+			aux.add(new Reserva(r));
+		}
+		return aux;
+	}
+	
+	public List<Reserva> getReservas() {
+		return copiaProfundaReservas(coleccionReservas);
+	}
+	
+	public int getNumReservas() {
+		return this.coleccionReservas.size();
+	}
+
+	public void insertar(Reserva reserva) throws OperationNotSupportedException{
+		if(reserva == null) {
+			throw new IllegalArgumentException("No se puede realizar una reserva nula.");
+		}
+		if(buscar(reserva) != null) {
+			throw new OperationNotSupportedException("La reserva ya existe.");
+		}
+		if(!esMesSiguienteOPosterior(reserva)) {
+			throw new OperationNotSupportedException("Sólo se pueden hacer reservas para el mes que viene o posteriores.");
+		}
+		Reserva aux = getReservaDia(reserva.getPermanencia().getDia());
+		if(aux != null && aux.getAula().equals(reserva.getAula())) {
+			if(aux.getPermanencia() instanceof PermanenciaPorTramo && reserva.getPermanencia() instanceof PermanenciaPorTramo) {
+				if(((PermanenciaPorTramo)aux.getPermanencia()).getTramo().equals(((PermanenciaPorTramo)reserva.getPermanencia()).getTramo())) {
+					throw new OperationNotSupportedException("Ya se ha realizado una reserva por tramo para este día y aula.");
+				}
+			}else if(aux.getPermanencia() instanceof PermanenciaPorTramo) {
+				throw new OperationNotSupportedException("Ya se ha realizado una reserva por tramo para este día y aula.");
 			}else {
-				aux[i] = new Reserva(c[i]);
+				throw new OperationNotSupportedException("Ya se ha realizado una reserva por hora para este día y aula.");
+			}
+		}
+		List<Reserva> aux2 = getReservasProfesorMes(reserva.getProfesor(), reserva.getPermanencia().getDia());
+		float suma = 0;
+		for (Reserva r : aux2) {
+			suma += getPuntosGastadosReserva(r);
+		}
+		if(suma + reserva.getPuntos() > MAX_PUNTOS_PROFESOR_MES) {
+			throw new OperationNotSupportedException("Esta reserva excede los puntos máximos por mes para dicho profesor.");
+		}
+		this.coleccionReservas.add(new Reserva(reserva));
+	}
+	
+	private boolean esMesSiguienteOPosterior(Reserva reserva) {
+		if(reserva.getPermanencia().getDia().getYear() < LocalDate.now().plusMonths(1).getYear()
+				|| reserva.getPermanencia().getDia().getYear() == LocalDate.now().plusMonths(1).getYear()
+				&& reserva.getPermanencia().getDia().getMonthValue() < LocalDate.now().plusMonths(1).getMonthValue()) {
+			return false;
+		}
+		return true;
+	}
+	
+	private float getPuntosGastadosReserva(Reserva r) {
+		return r.getPuntos();
+	}
+	
+	private List<Reserva> getReservasProfesorMes(Profesor p, LocalDate dia){
+		List<Reserva> aux = new ArrayList<Reserva>();
+		for (Reserva r : coleccionReservas) {
+			if(r.getProfesor().equals(p) && r.getPermanencia().getDia().getYear()==dia.getYear() && r.getPermanencia().getDia().getMonthValue()==dia.getMonthValue()) {
+				aux.add(r);
 			}
 		}
 		return aux;
 	}
 	
-	public int getNumReservas() {
-		return numReservas;
-	}
-
-	public Reserva[] getReservas() {
-		return copiaProfundaReservas(coleccionReservas);
-	}
-	
-	public void insertar(Reserva reserva) throws OperationNotSupportedException{
-		if(reserva == null) {
-			throw new IllegalArgumentException("No se puede realizar una reserva nula.");
-		}
-		if(buscarIndiceReserva(reserva) != -1) {
-			throw new OperationNotSupportedException("La reserva ya existe.");
-		}
-		if (!indiceNoSuperaTamano(numReservas)) {
-			throw new OperationNotSupportedException("Tamaño de reservas superada.");
-		}
-		this.coleccionReservas[numReservas] = reserva;
-		numReservas++;
-	}
-	
-	private int buscarIndiceReserva(Reserva reserva) {
-		for (int i = 0; i < coleccionReservas.length; i++) {
-			if(coleccionReservas[i] != null && coleccionReservas[i].equals(reserva)) {
-				return i;
+	private Reserva getReservaDia(LocalDate dia) {
+		for (Reserva r : coleccionReservas) {
+			if(r.getPermanencia().getDia().equals(dia)) {
+				return r;
 			}
 		}
-		return -1;
-		
-	}
-	
-	private boolean indiceNoSuperaTamano(int reservas) {
-		return reservas >= 0 && reservas < numReservas;
-		
-	}
-	
-	private boolean indiceNoSuperaCapacidad(int reservas) {
-		return reservas >= 0 && reservas < coleccionReservas.length;
-		
+		return null;
 	}
 	
 	public Reserva buscar(Reserva reserva) {
-		int index = buscarIndiceReserva(reserva);
+		int index = this.coleccionReservas.indexOf(reserva);
 		if(index == -1) {
 			return null;
 		}
-		return coleccionReservas[index];
+		return new Reserva(coleccionReservas.get(index));
 		
 	}
 	
@@ -97,60 +126,44 @@ public class Reservas {
 		if(reserva == null) {
 			throw new IllegalArgumentException("No se puede anular una reserva nula.");
 		}
-		int index = buscarIndiceReserva(reserva);
-		if(index == -1) {
+		if(this.coleccionReservas.remove(reserva) == false) {
 			throw new OperationNotSupportedException("La reserva a anular no existe.");
 		}
-		desplazarUnaPosicionHaciaIzquierda(index);
-		numReservas--;
 	}
 	
-	private void desplazarUnaPosicionHaciaIzquierda(int reservas) {
-		for (int i = reservas; i < coleccionReservas.length-1; i++) {
-			coleccionReservas[i] = coleccionReservas[i+1];
-		}
-		coleccionReservas[MAX_RESERVAS-1] = null;
-	}
-	
-	public String[] representar() {
-		String[] aux = new String[numReservas];
-		for (int i = 0; i < numReservas; i++) {
-			aux[i] = coleccionReservas[i].toString();
+	public List<String> representar() {
+		List<String> aux = new ArrayList<String>();
+		for (int i = 0; i < coleccionReservas.size(); i++) {
+			aux.add(coleccionReservas.get(i).toString());
 		}
 		return aux;
 	}
 	
-	public Reserva[] getReservasProfesor(Profesor profesor) {
-		Reserva[] aux = new Reserva[MAX_RESERVAS];
-		int j = 0;
-		for (int i = 0; i < coleccionReservas.length; i++) {
-			if(coleccionReservas[i] != null && coleccionReservas[i].getProfesor().equals(profesor)) {
-				aux[j] = coleccionReservas[i];
-				j++;
+	public List<Reserva> getReservasProfesor(Profesor profesor) {
+		List<Reserva> aux = new ArrayList<Reserva>();
+		for (Reserva r : coleccionReservas) {
+			if(r.getProfesor().equals(profesor)) {
+				aux.add(r);
 			}
 		}
 		return aux;
 	}
 	
-	public Reserva[] getReservasAula(Aula aula) {
-		Reserva[] aux = new Reserva[MAX_RESERVAS];
-		int j = 0;
-		for (int i = 0; i < coleccionReservas.length; i++) {
-			if(coleccionReservas[i] != null && coleccionReservas[i].getAula().equals(aula)) {
-				aux[j] = coleccionReservas[i];
-				j++;
+	public List<Reserva> getReservasAula(Aula aula) {
+		List<Reserva> aux = new ArrayList<Reserva>();
+		for (Reserva r : coleccionReservas) {
+			if(r.getAula().equals(aula)) {
+				aux.add(r);
 			}
 		}
 		return aux;
 	}
 	
-	public Reserva[] getReservasPermanencia(Permanencia permanencia) {
-		Reserva[] aux = new Reserva[MAX_RESERVAS];
-		int j = 0;
-		for (int i = 0; i < coleccionReservas.length; i++) {
-			if(coleccionReservas[i] != null && coleccionReservas[i].getPermanencia().equals(permanencia)) {
-				aux[j] = coleccionReservas[i];
-				j++;
+	public List<Reserva> getReservasPermanencia(Permanencia permanencia) {
+		List<Reserva> aux = new ArrayList<Reserva>();
+		for (Reserva r : coleccionReservas) {
+			if(r.getPermanencia().equals(permanencia)) {
+				aux.add(r);
 			}
 		}
 		return aux;
@@ -163,8 +176,8 @@ public class Reservas {
 		if(permanencia == null) {
 			throw new IllegalArgumentException("No se puede consultar la disponibilidad de una permanencia nula.");
 		}
-		for (int i = 0; i < coleccionReservas.length; i++) {
-			if(coleccionReservas[i] != null && coleccionReservas[i].getAula().equals(aula) && coleccionReservas[i].getPermanencia().equals(permanencia)) {
+		for (Reserva r : coleccionReservas) {
+			if(r.getAula().equals(aula) && r.getPermanencia().equals(permanencia)) {
 				return false;
 			}
 		}
