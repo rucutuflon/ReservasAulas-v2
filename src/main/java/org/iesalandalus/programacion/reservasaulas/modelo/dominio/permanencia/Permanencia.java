@@ -21,12 +21,6 @@ public abstract class Permanencia {
 		setDia(dia);
 	}
 	
-//	public Permanencia(Permanencia p) {
-//		if(p == null) {
-//			throw new IllegalArgumentException("No se puede copiar una permanencia nula.");
-//		}
-//		this.dia = p.dia;
-//	}
 
 	public LocalDate getDia() {
 		return dia;
@@ -50,13 +44,6 @@ public abstract class Permanencia {
 		}
 		
 	}
-
-//	public void setTramo(Tramo tramo) {
-//		if(tramo == null) {
-//			throw new IllegalArgumentException("El tramo de una permanencia no puede ser nulo.");
-//		}
-//		this.tramo = tramo;
-//	}
 	
 	public abstract int getPuntos();
 
