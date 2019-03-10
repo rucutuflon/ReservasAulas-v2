@@ -1,6 +1,8 @@
 package org.iesalandalus.programacion.reservasaulas.modelo.dominio;
 
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.Permanencia;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.PermanenciaPorHora;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.PermanenciaPorTramo;
 
 public class Reserva {
 	
@@ -15,20 +17,25 @@ public class Reserva {
 	}
 	
 	public Reserva(Reserva r) {
-		if (r == null) {
+		if(r == null) {
 			throw new IllegalArgumentException("No se puede copiar una reserva nula.");
 		}
 		this.profesor = new Profesor(r.profesor);
 		this.aula = new Aula(r.aula);
-		this.permanencia = new Permanencia(r.permanencia);
+		if(r.permanencia instanceof PermanenciaPorHora) {
+			this.permanencia = new PermanenciaPorHora((PermanenciaPorHora)r.permanencia);
+		}else {
+			this.permanencia = new PermanenciaPorTramo((PermanenciaPorTramo)r.permanencia);
+		}
+		
 	}
 
 	public Profesor getProfesor() {
 		return profesor;
 	}
 
-	public void setProfesor(Profesor profesor) {
-		if (profesor == null) {
+	private void setProfesor(Profesor profesor) {
+		if(profesor == null) {
 			throw new IllegalArgumentException("La reserva debe estar a nombre de un profesor.");
 		}
 		this.profesor = profesor;
@@ -38,8 +45,8 @@ public class Reserva {
 		return aula;
 	}
 
-	public void setAula(Aula aula) {
-		if (aula == null) {
+	private void setAula(Aula aula) {
+		if(aula == null) {
 			throw new IllegalArgumentException("La reserva debe ser para un aula concreta.");
 		}
 		this.aula = aula;
@@ -49,13 +56,16 @@ public class Reserva {
 		return permanencia;
 	}
 
-	public void setPermanencia(Permanencia permanencia) {
-		if (permanencia == null) {
+	private void setPermanencia(Permanencia permanencia) {
+		if(permanencia == null) {
 			throw new IllegalArgumentException("La reserva se debe hacer para una permanencia concreta.");
 		}
 		this.permanencia = permanencia;
 	}
-
+	
+	public float getPuntos() {
+		return permanencia.getPuntos() + aula.getPuntos();
+	}
 	
 
 	@Override
@@ -91,7 +101,7 @@ public class Reserva {
 
 	@Override
 	public String toString() {
-		return "[profesor=" + profesor + ", aula=" + aula + ", permanencia=" + permanencia + "]";
+		return "[profesor=" + profesor + ", aula=" + aula + ", permanencia=" + permanencia + ", puntos="+getPuntos()+"]";
 	}
 	
 	
