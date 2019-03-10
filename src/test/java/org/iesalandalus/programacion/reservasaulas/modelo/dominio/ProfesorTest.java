@@ -64,7 +64,7 @@ public class ProfesorTest {
 			profesor = new Profesor("", CORREO);
 			fail(ERROR_EXCEPCION);
 		} catch (IllegalArgumentException e) {
-			assertEquals("El nombre del profesor no puede estar vac√≠o.", e.getMessage());
+			assertEquals("El nombre del profesor no puede estar vacÌo.", e.getMessage());
 			assertNull(profesor);
 		}
 		try {
@@ -78,7 +78,7 @@ public class ProfesorTest {
 			profesor = new Profesor(NOMBRE, "");
 			fail(ERROR_EXCEPCION);
 		} catch (IllegalArgumentException e) {
-			assertEquals("El correo del profesor no es v√°lido.", e.getMessage());
+			assertEquals("El correo del profesor no es v·lido.", e.getMessage());
 			assertNull(profesor);
 		}
 	}
@@ -90,7 +90,7 @@ public class ProfesorTest {
 			profesor = new Profesor(NOMBRE, CORREO, "");
 			fail(ERROR_EXCEPCION);
 		} catch (IllegalArgumentException e) {
-			assertEquals("El tel√©fono del profesor no es v√°lido.", e.getMessage());
+			assertEquals("El telÈfono del profesor no es v·lido.", e.getMessage());
 			assertNull(profesor);
 		}
 	}

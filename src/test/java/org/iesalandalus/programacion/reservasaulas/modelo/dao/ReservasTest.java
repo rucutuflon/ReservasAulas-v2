@@ -140,7 +140,7 @@ public class ReservasTest {
 			reservas.insertar(reserva);
 			fail(ERROR_EXCEPCION);
 		} catch (OperationNotSupportedException e) {
-			assertEquals("Ya se ha realizado una reserva por hora para este d√≠a y aula.", e.getMessage());
+			assertEquals("Ya se ha realizado una reserva por hora para este dÌa y aula.", e.getMessage());
 			assertEquals(1, reservas.getNumReservas());
 		} 
 		reservas = new Reservas();
@@ -151,7 +151,7 @@ public class ReservasTest {
 			reservas.insertar(reserva);
 			fail(ERROR_EXCEPCION);
 		} catch (OperationNotSupportedException e) {
-			assertEquals("Ya se ha realizado una reserva por tramo para este d√≠a y aula.", e.getMessage());
+			assertEquals("Ya se ha realizado una reserva por tramo para este dÌa y aula.", e.getMessage());
 			assertEquals(1, reservas.getNumReservas());
 		} 
 	}
@@ -165,7 +165,7 @@ public class ReservasTest {
 			reservas.insertar(reserva);
 			fail(ERROR_EXCEPCION);
 		} catch (OperationNotSupportedException e) {
-			assertEquals("S√≥lo se pueden hacer reservas para el mes que viene o posteriores.", e.getMessage());
+			assertEquals("SÛlo se pueden hacer reservas para el mes que viene o posteriores.", e.getMessage());
 			assertEquals(0, reservas.getNumReservas());
 		} 
 	}
@@ -185,7 +185,7 @@ public class ReservasTest {
 			reservas.insertar(reserva);
 			fail(ERROR_EXCEPCION);
 		} catch (OperationNotSupportedException e) {
-			assertEquals("Esta reserva excede los puntos m√°ximos por mes para dicho profesor.", e.getMessage());
+			assertEquals("Esta reserva excede los puntos m·ximos por mes para dicho profesor.", e.getMessage());
 			assertEquals(3, reservas.getNumReservas());
 		} 
 		try {
@@ -199,7 +199,7 @@ public class ReservasTest {
 			reservas.insertar(reserva);
 			fail(ERROR_EXCEPCION);
 		} catch (OperationNotSupportedException e) {
-			assertEquals("Esta reserva excede los puntos m√°ximos por mes para dicho profesor.", e.getMessage());
+			assertEquals("Esta reserva excede los puntos m·ximos por mes para dicho profesor.", e.getMessage());
 			assertEquals(6, reservas.getNumReservas());
 		} 
 	}

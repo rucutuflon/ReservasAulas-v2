@@ -44,21 +44,21 @@ public class AulaTest {
 			aula = new Aula("", PUESTOS);
 			fail(ERROR_EXCEPCION);
 		} catch (IllegalArgumentException e) {
-			assertEquals("El nombre del aula no puede estar vacÃ­o.", e.getMessage());
+			assertEquals("El nombre del aula no puede estar vacío.", e.getMessage());
 			assertNull(aula);
 		}
 		try {
 			aula = new Aula(NOMBRE, 9);
 			fail(ERROR_EXCEPCION);
 		} catch (IllegalArgumentException e) {
-			assertEquals("El nÃºmero de puestos no es correcto.", e.getMessage());
+			assertEquals("El número de puestos no es correcto.", e.getMessage());
 			assertNull(aula);
 		}
 		try {
 			aula = new Aula(NOMBRE, 101);
 			fail(ERROR_EXCEPCION);
 		} catch (IllegalArgumentException e) {
-			assertEquals("El nÃºmero de puestos no es correcto.", e.getMessage());
+			assertEquals("El número de puestos no es correcto.", e.getMessage());
 			assertNull(aula);
 		}
 	}

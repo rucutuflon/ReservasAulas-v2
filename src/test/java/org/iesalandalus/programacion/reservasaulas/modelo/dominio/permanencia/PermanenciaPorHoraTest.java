@@ -105,7 +105,7 @@ public class PermanenciaPorHoraTest {
 			permanencia = new PermanenciaPorHora(dia, HORA_LT);
 			fail(ERROR_EXCEPCION);
 		} catch (IllegalArgumentException e) {
-			assertEquals("El dÃ­a de una permanencia no puede ser nulo.", e.getMessage());
+			assertEquals("El día de una permanencia no puede ser nulo.", e.getMessage());
 			assertNull(permanencia);
 		}
 		try {
@@ -113,7 +113,7 @@ public class PermanenciaPorHoraTest {
 			permanencia = new PermanenciaPorHora(dia, HORA_LT);
 			fail(ERROR_EXCEPCION);
 		} catch (IllegalArgumentException e) {
-			assertEquals("El dÃ­a de una permanencia no puede ser nulo.", e.getMessage());
+			assertEquals("El día de una permanencia no puede ser nulo.", e.getMessage());
 			assertNull(permanencia);
 		}
 		try {
@@ -121,7 +121,7 @@ public class PermanenciaPorHoraTest {
 			permanencia = new PermanenciaPorHora(dia, HORA_LT);
 			fail(ERROR_EXCEPCION);
 		} catch (IllegalArgumentException e) {
-			assertEquals("El formato del dÃ­a de la permanencia no es correcto.", e.getMessage());
+			assertEquals("El formato del día de la permanencia no es correcto.", e.getMessage());
 			assertNull(permanencia);
 		}
 		try {
