@@ -1,7 +1,5 @@
 package org.iesalandalus.programacion.reservasaulas.modelo.dominio;
 
-import org.apache.commons.math3.linear.IllConditionedOperatorException;
-
 public class Aula {
 	
 	private static final float PUNTOS_POR_PUESTO = 0.5f;
@@ -17,6 +15,7 @@ public class Aula {
 	
 	public Aula(String nombre) {
 		setNombre(nombre);
+		puestos = (int) (Math.random() * (MAX_PUESTOS - MIN_PUESTOS + 1) + MIN_PUESTOS);
 	}
 	
 	public Aula(Aula a) {
@@ -36,18 +35,19 @@ public class Aula {
 			throw new IllegalArgumentException("El nombre del aula no puede ser nulo.");
 		}
 		if(nombre.isEmpty()) {
-			throw new IllegalArgumentException("El nombre del aula no puede estar vacÃ­o.");
+			throw new IllegalArgumentException("El nombre del aula no puede estar vacío.");
 		}
 		this.nombre = nombre;
 	}
+	
 
 	public int getPuestos() {
 		return puestos;
 	}
 
 	private void setPuestos(int puestos) {
-		if (puestos < MIN_PUESTOS || puestos >MAX_PUESTOS) {
-			throw new IllegalArgumentException("El nÃºmero de puestos no es correcto.");
+		if(puestos < MIN_PUESTOS || puestos > MAX_PUESTOS) {
+			throw new IllegalArgumentException("El número de puestos no es correcto.");
 		}
 		this.puestos = puestos;
 	}
@@ -55,6 +55,7 @@ public class Aula {
 	public float getPuntos() {
 		return this.puestos * PUNTOS_POR_PUESTO;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -82,7 +83,7 @@ public class Aula {
 
 	@Override
 	public String toString() {
-		return "[nombre=" + nombre + ", puestos=" + puestos + "]";
+		return "[nombre=" + nombre + ", puestos="+puestos+"]";
 	}
 	
 	
